@@ -1,0 +1,4 @@
+Item.cpp: In member function ‘void Item::display(std::ostream&, bool) const’:
+Item.cpp:60:21: warning: comparison of integer expressions of different signedness: ‘int’ and ‘std::__cxx11::basic_string<char>::size_type’ {aka ‘long unsigned int’} [-Wsign-compare]
+   60 |   for (int i = 0; i < (6 - serial.length()); i++)
+      |                   ~~^~~~~~~~~~~~~~~~~~~~~~~
