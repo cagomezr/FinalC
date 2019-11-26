@@ -23,7 +23,7 @@ class Linemanager {
 	std::deque<CustomerOrder> Completed;
 	unsigned int m_cntCustomerOrder;
 public:
-	Linemanager(const std::string);
+	Linemanager(const std::string, std::vector<Task*>& , std::vector<CustomerOrder>&);
 	bool run(std::ostream&);
 	void displayCompleted(std::ostream&) const;
 	void validateTasks() const;

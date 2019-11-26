@@ -15,7 +15,7 @@
 #include "CustomerOrder.h"
 #ifndef SDDS_TASK
 #define SDDS_TASK
-class Task:Item {
+class Task:public Item {
 	std::deque<CustomerOrder> m_orders;
 	Task* m_pNextTask;
 public:
