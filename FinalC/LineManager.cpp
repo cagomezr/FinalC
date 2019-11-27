@@ -34,7 +34,13 @@ Linemanager::Linemanager(const std::string filename, std::vector<Task*>& taskBui
 
 bool Linemanager::run(std::ostream&)
 {
-	return false;
+	// while pointer  is not  null  run  run and  validate  so tis a linked list 
+	//run the entire  que from strart (begin) once you run an entire  cycle
+
+	//check if order is completed, if order is completed move  order to  completed.
+
+
+	return (ToBeFilled.size() ==0);
 }
 
 void Linemanager::displayCompleted(std::ostream& out) const
