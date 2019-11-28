@@ -27,6 +27,7 @@ public:
 	void runProcess(std::ostream&);
 	bool moveTask();	
 	void setNextTask(Task&);
+	Task* getnextTask();
 	bool getCompleted(CustomerOrder&);
 	void validate(std::ostream&);
 	Task& operator+=(CustomerOrder&&);

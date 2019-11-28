@@ -14,13 +14,12 @@ void Task::runProcess(std::ostream& out)
 
 bool Task::moveTask()
 {	
-	if ((m_orders.back().getItemFillState(this->getName())) and (m_pNextTask != nullptr)) {
-		CustomerOrder send;
-		getCompleted(send);
-		*m_pNextTask += std::move(send);
+	if ((m_orders.back().getItemFillState(this->getName())) && (m_pNextTask != nullptr)) {
+
+		*m_pNextTask += std::move(m_orders.back());
+		m_orders.pop_back();
 	}
-	bool retval = (m_orders.size() == 0u) ? false : true;
-	return retval;
+	return (m_orders.size() == 0u) ? false : true;;
 }
 
 void Task::setNextTask(Task& nexttask)
@@ -28,14 +27,18 @@ void Task::setNextTask(Task& nexttask)
 	m_pNextTask = &nexttask;
 }
 
+Task* Task::getnextTask()
+{
+	return m_pNextTask;
+}
+
 bool Task::getCompleted(CustomerOrder& sending)
 {	
-	sending = std::move(m_orders.back());
-	bool returnvalue = false;
-	m_orders.pop_back();
-	if (m_orders.size() == 0u)
-		returnvalue = true;
-	return returnvalue;
+	if (m_orders.back().getOrderFillState()) {
+		sending = std::move(m_orders.back());		
+		m_orders.pop_back();
+	}
+	return (m_orders.size() == 0u);
 }
 
 void Task::validate(std::ostream& out)

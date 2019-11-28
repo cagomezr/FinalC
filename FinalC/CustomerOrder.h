@@ -39,7 +39,7 @@ public:
 	bool getOrderFillState() const;//goes through order and  returns if order is  ready or not
 	void fillItem(Item& item, std::ostream&);//fills the item sent by reference, and udates item if its able to.
 	void display(std::ostream&) const;// displays the object customer order
-
+	bool empty();//returns false if empty
 };
 
 #endif

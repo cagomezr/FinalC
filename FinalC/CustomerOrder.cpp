@@ -135,3 +135,8 @@ void CustomerOrder::display(std::ostream& out) const
 		out << "\n";
 	}
 }
+
+bool CustomerOrder::empty()
+{	
+	return ((m_name.empty()) &&(m_cntItem == 0u ));
+}
