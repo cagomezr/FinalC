@@ -14,7 +14,7 @@
 #include "Utilities.h"
 #include "Item.h"
 #include "Task.h"
-#include "CustomerOrder.h"hg
+#include "CustomerOrder.h"
 #ifndef SDDS_LINEMANAGER
 #define SDDS_LINEMANAGER
 class Linemanager {
@@ -22,10 +22,11 @@ class Linemanager {
 	std::deque<CustomerOrder> ToBeFilled;
 	std::deque<CustomerOrder> Completed;
 	unsigned int m_cntCustomerOrder;
+	Task* Linestart;
 public:
 	Linemanager(const std::string, std::vector<Task*>& , std::vector<CustomerOrder>&);
 	bool run(std::ostream&);
 	void displayCompleted(std::ostream&) const;
-	void validateTasks() const;
+	void validateTasks() ;
 };
 #endif

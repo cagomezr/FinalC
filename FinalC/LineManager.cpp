@@ -4,29 +4,34 @@ Linemanager::Linemanager(const std::string filename, std::vector<Task*>& taskBui
 {
 	std::move(Customerorders.begin(), Customerorders.end(), std::back_inserter(ToBeFilled));
 	std::copy(taskBuilder.begin(), taskBuilder.end(), std::back_inserter(AssemblyLine));
-	ifstream file(filename);
+	std::ifstream file(filename);
 	if (!file)
-		throw string("Unable to open [") + filename + "] file.";
-	string record;
-	Utilities pointersmanager
+		throw std::string("Unable to open [") + filename + "] file.";
+	std::string record;
+	Utilities pointersmanager;
+	bool firstexec = true;
 	while (!file.eof())
 	{
 		std::getline(file, record);
 		Task* begin;
 		Task* end;
+		std::string findstr;
 		size_t startCode = 0u;
 		bool moreContent = true;
-		auto lambdafind = [&](string dats) {
-			//add search logic			
-			// returns the task data address;
+		auto lambdafind = [&](Task* data) {	
+			return (data->getName().compare(findstr) == 0);				 
 		};
-		
-		std::string return1 = pointersmanager.extractToken(record, startCode, moreContent);
-		if (morecontent) {
-			std::string return2 = pointersmanager.extractToken(record, startCode, moreContent);
-			begin = lambdafind(return1);
-			end = lambdafind(return2);
-			begin->setNextTask(end);
+		findstr = pointersmanager.extractToken(record, startCode, moreContent);
+		begin = (std::find_if(AssemblyLine.begin(), AssemblyLine.end(), lambdafind))[0];
+		if (firstexec) {
+			Linestart = begin;
+			firstexec = false;
+		}
+
+		if (moreContent) {
+			findstr = pointersmanager.extractToken(record, startCode, moreContent);
+			end = (std::find_if(AssemblyLine.begin(), AssemblyLine.end(), lambdafind))[0];
+			begin->setNextTask(*end);
 		}
 	}
 
@@ -45,16 +50,16 @@ bool Linemanager::run(std::ostream&)
 
 void Linemanager::displayCompleted(std::ostream& out) const
 {
-	auto runfunc = [&](CustomerOrder& single) {
+	auto runfunc = [&](const CustomerOrder& single) {
 		single.display(out);
 	};
 	std::for_each(Completed.begin(), Completed.end(), runfunc);
 }
 
-void Linemanager::validateTasks() const
+void Linemanager::validateTasks() 
 {
-	auto runfunc = [&](Task& single) {
-		single.validate(std::cout);
+	auto runfunc = [&](Task* single) {
+		single->validate(std::cout);
 	};
 	std::for_each(AssemblyLine.begin(), AssemblyLine.end(), runfunc);
 }
