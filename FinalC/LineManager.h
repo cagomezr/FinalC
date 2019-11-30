@@ -18,15 +18,16 @@
 #ifndef SDDS_LINEMANAGER
 #define SDDS_LINEMANAGER
 class LineManager {
-	std::vector<Task*> AssemblyLine;
-	std::deque<CustomerOrder> ToBeFilled;
-	std::deque<CustomerOrder> Completed;
-	unsigned int m_cntCustomerOrder;
-	Task* Linestart;	
+	std::vector<Task*> AssemblyLine;//A container containing all the references of the Task objects on the assembly line
+	std::deque<CustomerOrder> ToBeFilled;//A queue of customer orders to be filled
+	std::deque<CustomerOrder> Completed;//A queue of customer orders completed
+	unsigned int m_cntCustomerOrder;//The number of CustomerOrder objects the assembly line started with.
+	Task* Linestart;//beggining of the Assembly line.	
+	Task* Lineend;//end of the Assembly line.	
 public:
-	LineManager(const std::string, std::vector<Task*>& , std::vector<CustomerOrder>&);
-	bool run(std::ostream&);
-	void displayCompleted(std::ostream&) const;
-	void validateTasks() ;
+	LineManager(const std::string, std::vector<Task*>& , std::vector<CustomerOrder>&);//custom constructor 
+	bool run(std::ostream&);// this function performs one cycle of operations on the assembly line 
+	void displayCompleted(std::ostream&) const;//displays all the orders that were completed
+	void validateTasks() ;//validates each task on the assembly line
 };
 #endif

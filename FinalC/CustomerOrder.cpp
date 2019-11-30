@@ -129,8 +129,8 @@ void CustomerOrder::display(std::ostream& out) const
 	for (auto i = 0u; i < m_cntItem; i++) {
 		
 		std::string serial = std::to_string(m_lstItem[i]->m_serialNumber);
-		out << std::left << "[" << std::setfill('0') << std::setw(6) << serial << "] ";
-		out << std::setfill(' ') << std::setw(m_widthField) << m_lstItem[i]->m_itemName<<" - ";
+		out << std::right << "[" << std::setfill('0') << std::setw(6) << serial << "] ";
+		out << std::left << std::setfill(' ') << std::setw(m_widthField) << m_lstItem[i]->m_itemName<<" - ";
 		(m_lstItem[i]->m_fillState) ? out << "FILLED" : out << "MISSING";
 		out << "\n";
 	}
