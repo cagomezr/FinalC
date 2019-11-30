@@ -1,18 +1,24 @@
+// Name:Carlos Antonio Gomez
+// Seneca Student ID: 032936056
+// Seneca email:cagomez@myseneca.ca
+// Date of completion: 29/11/2019
+//
+// I confirm that I am the only author of this file
+//   and the content was created entirely by me.
 #include "LineManager.h"
 
-Linemanager::Linemanager(const std::string filename, std::vector<Task*>& taskBuilder, std::vector<CustomerOrder>& Customerorders)
+LineManager::LineManager(const std::string filename, std::vector<Task*>& taskBuilder, std::vector<CustomerOrder>& Customerorders)
 {
 	std::move(Customerorders.begin(), Customerorders.end(), std::back_inserter(ToBeFilled));
 	std::copy(taskBuilder.begin(), taskBuilder.end(), std::back_inserter(AssemblyLine));
 	std::ifstream file(filename);
 	m_cntCustomerOrder = ToBeFilled.size();
 	Linestart = nullptr;
-	Lineend = nullptr;
+	
 	if (!file)
 		throw std::string("Unable to open [") + filename + "] file.";
 	std::string record;
 	Utilities pointersmanager;
-	bool firstexec = true;
 	while (!file.eof())
 	{
 		std::getline(file, record);
@@ -21,52 +27,50 @@ Linemanager::Linemanager(const std::string filename, std::vector<Task*>& taskBui
 		std::string findstr;
 		size_t startCode = 0u;
 		bool moreContent = true;
-		auto lambdafind = [&](Task* data) {	
-			return (data->getName().compare(findstr) == 0);				 
+		auto lambdafind = [&](const Task* data) {
+			return (data->getName().compare(findstr) == 0);
 		};
-		findstr = pointersmanager.extractToken(record, startCode, moreContent);
-		begin = (std::find_if(AssemblyLine.begin(), AssemblyLine.end(), lambdafind))[0];
+		findstr = pointersmanager.extractToken(record, startCode, moreContent);		
+		begin = *(std::find_if(AssemblyLine.begin(), AssemblyLine.end(), lambdafind));
 		if (Linestart== nullptr)
 			Linestart = begin;
-		
 
 		if (moreContent) {
 			findstr = pointersmanager.extractToken(record, startCode, moreContent);
-			end = (std::find_if(AssemblyLine.begin(), AssemblyLine.end(), lambdafind))[0];
-			begin->setNextTask(*end);
-		}
-		else {
-			Lineend = begin;
+			begin->setNextTask(**(std::find_if(AssemblyLine.begin(), AssemblyLine.end(), lambdafind)));
 		}
 	}
 
 }
 
-bool Linemanager::run(std::ostream& out)
+bool LineManager::run(std::ostream& out)
 {
-	// while pointer  is not  null  run  run and  validate  so tis a linked list 
-	//run the entire  que from strart (begin) once you run an entire  cycle
-	*(Linestart) += std::move(ToBeFilled.back());
-	Task* current = Linestart;
-	do  {
+	auto runforeach = [&](Task* current) {
 		current->runProcess(out);
-		if (current->getnextTask() != nullptr)
-		{
+	};
+	auto moveforeach = [&](Task* current) {
+		CustomerOrder possiblecomplete;
+		current->getCompleted(possiblecomplete);
+		if (!possiblecomplete.empty())
+			Completed.push_back(std::move(possiblecomplete));
+		else
 			current->moveTask();
-			current = current->getnextTask();
+	};
+	if (Linestart != nullptr) {
+		Task* current = Linestart;
+		if (ToBeFilled.size() != 0) {
+			*(Linestart) += std::move(ToBeFilled.front());
+			ToBeFilled.pop_front();
 		}
-		else {//check if order is completed, if order is completed move  order to  completed.
-			CustomerOrder possiblecomplete;
-			current->getCompleted(possiblecomplete);
-			if (!possiblecomplete.empty())
-				Completed.push_back(std::move(possiblecomplete));
-		}
-	} while (current->getnextTask() != nullptr);
-
+		
+		std::for_each(AssemblyLine.begin(), AssemblyLine.end(), runforeach);
+		std::for_each(AssemblyLine.begin(), AssemblyLine.end(), moveforeach);
+		
+	}
 	return(Completed.size() == m_cntCustomerOrder);
 }
 
-void Linemanager::displayCompleted(std::ostream& out) const
+void LineManager::displayCompleted(std::ostream& out) const
 {
 	auto runfunc = [&](const CustomerOrder& single) {
 		single.display(out);
@@ -74,7 +78,7 @@ void Linemanager::displayCompleted(std::ostream& out) const
 	std::for_each(Completed.begin(), Completed.end(), runfunc);
 }
 
-void Linemanager::validateTasks() 
+void LineManager::validateTasks()
 {
 	auto runfunc = [&](Task* single) {
 		single->validate(std::cout);

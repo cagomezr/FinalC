@@ -133,7 +133,7 @@
     <ClCompile Include="CustomerOrder.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="LineManager.cpp" />
-    <ClCompile Include="ms2.cpp" />
+    <ClCompile Include="m3.cpp" />
     <ClCompile Include="Task.cpp" />
     <ClCompile Include="Utilities.cpp" />
   </ItemGroup>

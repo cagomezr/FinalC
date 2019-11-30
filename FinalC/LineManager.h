@@ -1,7 +1,7 @@
 // Name:Carlos Antonio Gomez
 // Seneca Student ID: 032936056
 // Seneca email:cagomez@myseneca.ca
-// Date of completion: 23/11/2019
+// Date of completion: 29/11/2019
 //
 // I confirm that I am the only author of this file
 //   and the content was created entirely by me.
@@ -17,16 +17,14 @@
 #include "CustomerOrder.h"
 #ifndef SDDS_LINEMANAGER
 #define SDDS_LINEMANAGER
-class Linemanager {
+class LineManager {
 	std::vector<Task*> AssemblyLine;
 	std::deque<CustomerOrder> ToBeFilled;
 	std::deque<CustomerOrder> Completed;
 	unsigned int m_cntCustomerOrder;
-	Task* Linestart;
-	Task* Lineend;
-	
+	Task* Linestart;	
 public:
-	Linemanager(const std::string, std::vector<Task*>& , std::vector<CustomerOrder>&);
+	LineManager(const std::string, std::vector<Task*>& , std::vector<CustomerOrder>&);
 	bool run(std::ostream&);
 	void displayCompleted(std::ostream&) const;
 	void validateTasks() ;
