@@ -37,14 +37,16 @@ void Task::setNextTask(Task& nexttask)
 }
 //– Removes the last CustomerOrder from the queue, places it in the parameter and returns true. If the CustomerOrder queue is empty, return false.
 bool Task::getCompleted(CustomerOrder& sending)
-{	
-	if(m_orders.size() != 0u)
+{
+	bool retval = false;
+	if (m_orders.size() != 0u)
 		if (m_orders.back().getOrderFillState()) {
 			sending = std::move(m_orders.back());
 			m_orders.pop_back();
+			retval = true;
 		}
 
-	return (m_orders.size() == 0u);
+	return retval;
 }
 // writes the name of the Item this Task is responsible for into the parameter: ostream
 void Task::validate(std::ostream& out)

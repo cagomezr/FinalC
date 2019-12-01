@@ -63,9 +63,8 @@ bool LineManager::run(std::ostream& out)
 		
 		std::for_each(AssemblyLine.begin(), AssemblyLine.end(), runforeach);
 		std::for_each(AssemblyLine.begin(), AssemblyLine.end(), moveforeach);
-		CustomerOrder possiblecomplete;
-		Lineend->getCompleted(possiblecomplete);
-		if (!possiblecomplete.empty())
+		CustomerOrder possiblecomplete;		
+		if (Lineend->getCompleted(possiblecomplete))
 			Completed.push_back(std::move(possiblecomplete));
 	}
 	return(Completed.size() == m_cntCustomerOrder);
